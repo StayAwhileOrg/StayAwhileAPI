@@ -2,14 +2,20 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middleware.js");
 
-router.post("/cabin/:userId", verifyToken, require('../controllers/cabin/createCabin.js'));
+const createCabin = require("../controllers/cabin/createCabin");
+const getAllCabins = require("../controllers/cabin/getAllCabins");
+const getCabin = require("../controllers/cabin/getCabin");
+const updateCabin = require("../controllers/cabin/updateCabin");
+const deleteCabin = require("../controllers/cabin/deleteCabin");
 
-router.get('/cabin', require('../controllers/cabin/getAllCabins.js'));
+router.post("/:userId", verifyToken, createCabin);
 
-router.get('/cabin/:cabinId', require('../controllers/cabin/getCabin.js'));
+router.get("/", getAllCabins);
 
-router.put('/cabin/:cabinId', verifyToken, require('../controllers/cabin/updateCabin.js'));
+router.get("/:cabinId", getCabin);
 
-router.delete('/cabin/:cabinId', verifyToken, require('../controllers/cabin/deleteCabin.js'));
+router.put("/:cabinId", verifyToken, updateCabin);
+
+router.delete("/:cabinId", verifyToken, deleteCabin);
 
 module.exports = router;
