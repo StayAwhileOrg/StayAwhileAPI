@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middleware.js");
 
-const createCabin = require("../controllers/cabin/createCabin");
-const getAllCabins = require("../controllers/cabin/getAllCabins");
-const getCabin = require("../controllers/cabin/getCabin");
-const updateCabin = require("../controllers/cabin/updateCabin");
-const deleteCabin = require("../controllers/cabin/deleteCabin");
+const { createCabin } = require("../controllers/cabin/createCabin.js");
+const { getAllCabins } = require("../controllers/cabin/getAllCabins.js");
+const { getCabin } = require("../controllers/cabin/getCabin.js");
+const { updateCabin } = require("../controllers/cabin/updateCabin.js");
+const { deleteCabin } = require("../controllers/cabin/deleteCabin.js");
 
 router.post("/:userId", verifyToken, createCabin);
 

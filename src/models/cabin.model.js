@@ -1,23 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const CabinSchema = new mongoose.Schema(
     {
         title: {
             type: String,
-            required: [true, 'Cabin name is required'],
+            required: [true, "Cabin name is required"],
             trim: true,
-            maxlength: [100, 'Cabin name cannot exceed 100 characters'],
+            maxlength: [100, "Cabin name cannot exceed 100 characters"],
         },
         description: {
             type: String,
             trim: true,
-            maxlength: [400, 'Description cannot exceed 500 characters'],
+            maxlength: [400, "Description cannot exceed 500 characters"],
         },
         images: {
             type: [
                 {
                     imgURL: { type: String, required: true },
-                    imgAlt: { type: String, default: 'image' },
+                    imgAlt: { type: String, default: "image" },
                 },
             ],
             required: true,
@@ -25,49 +25,49 @@ const CabinSchema = new mongoose.Schema(
                 validator: function (value) {
                     return value.length > 0;
                 },
-                message: 'At least one image is required',
+                message: "At least one image is required",
             },
         },
         location: {
             street: {
                 type: String,
-                required: [true, 'Street is required'],
+                required: [true, "Street is required"],
                 trim: true,
             },
             city: {
                 type: String,
-                required: [true, 'City is required'],
+                required: [true, "City is required"],
                 trim: true,
             },
             postalCode: {
                 type: String,
-                required: [true, 'Postal code is required'],
+                required: [true, "Postal code is required"],
                 trim: true,
             },
             country: {
                 type: String,
-                required: [true, 'Country is required'],
+                required: [true, "Country is required"],
                 trim: true,
             },
         },
         pricePerNight: {
             type: Number,
-            required: [true, 'Price per night is required'],
-            min: [0, 'Price cannot be negative'],
+            required: [true, "Price per night is required"],
+            min: [0, "Price cannot be negative"],
         },
         capacity: {
             type: Number,
-            required: [true, 'Capacity is required'],
-            min: [1, 'Capacity must be at least 1'],
+            required: [true, "Capacity is required"],
+            min: [1, "Capacity must be at least 1"],
         },
         owner: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: [true, 'Owner is required'],
+            ref: "User",
+            required: [true, "Owner is required"],
         },
     },
     { timestamps: true }
 );
 
-const Cabin = mongoose.model('Cabin', CabinSchema);
+const Cabin = mongoose.model("cabin", CabinSchema);
 module.exports = Cabin;
