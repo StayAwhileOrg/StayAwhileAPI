@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-// import functionality
 
-router.post("/login", login);
+router.post("/login", require('../controllers/auth/login.js'));
 
-router.post("/register", register);
+router.post('/register', require('../controllers/auth/register.js'));
 
 module.exports = router;
