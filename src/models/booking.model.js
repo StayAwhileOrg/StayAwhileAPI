@@ -42,7 +42,9 @@ const BookingSchema = new mongoose.Schema(
         },
     },
     { timestamps: true }
-);
+); 
+
+// get all user info
 
 const Booking = mongoose.model("Booking", BookingSchema);
 module.exports = Booking;

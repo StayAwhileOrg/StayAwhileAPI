@@ -32,6 +32,12 @@ const UserSchema = new mongoose.Schema(
             minlength: [8, 'Password must be at least 8 characters'],
             select: false,
         },
+        phone: {
+            type: Number,
+            trim: true,
+            maxlength: 8,
+            minlength: 8,
+        },
         images: {
             imgUrl: {
                 type: String,
@@ -57,6 +63,9 @@ const UserSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
+// rating
+// all booking by profile
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
