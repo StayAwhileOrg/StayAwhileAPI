@@ -55,6 +55,43 @@ const UserSchema = new mongoose.Schema(
             trim: true,
             maxlength: 400,
         },
+        ratings: [
+            {
+                raterId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User',
+                    required: true,
+                },
+                rating: {
+                    type: Number,
+                    required: true,
+                    min: [1, 'Rating must be at least 1'],
+                    max: [5, 'Rating cannot exceed 5'],
+                },
+                timestamp: {
+                    type: Date,
+                    default: Date.now,
+                },
+            },
+        ],
+        averageRating: {
+            type: Number,
+            min: 1,
+            max: 5,
+            default: null,
+        },
+        bookedCabins: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Booking',
+            },
+        ],
+        postedBookings: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Booking',
+            },
+        ],
         role: {
             type: String,
             enum: ['user', 'admin'],
@@ -64,7 +101,22 @@ const UserSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// rating
+UserSchema.pre('save', function (next) {
+    if (this.isModified('ratings')) {
+        const totalRatings = this.ratings.length;
+        if (totalRatings > 0) {
+            const sum = this.ratings.reduce(
+                (acc, curr) => acc + curr.rating,
+                0
+            );
+            this.averageRating = sum / totalRatings;
+        } else {
+            this.averageRating = null;
+        }
+    }
+    next();
+});
+
 // all booking by profile
 
 const User = mongoose.model('User', UserSchema);
