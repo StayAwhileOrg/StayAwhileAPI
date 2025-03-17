@@ -4,8 +4,6 @@ const getProfile = require('../controllers/profile/getProfile.js');
 const updateProfile = require('../controllers/profile/updateProfile.js');
 const { verifyToken } = require("../middleware.js");
 
-// router.get("/profile", require('../controllers/profile/getAllProfiles.js'));
-
 router.get('/profile/:userId', verifyToken, getProfile);
 
 router.put('/profile/:userId', verifyToken, updateProfile);
