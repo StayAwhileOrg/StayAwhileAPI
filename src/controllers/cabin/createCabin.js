@@ -1,6 +1,6 @@
-const Cabin = require('../../models/cabin.model');
-const User = require('../../models/user.model');
-const mongoose = require('mongoose');
+const Cabin = require("../../models/cabin.model");
+const User = require("../../models/user.model");
+const mongoose = require("mongoose");
 
 const createCabin = async (req, res) => {
     try {
@@ -10,13 +10,13 @@ const createCabin = async (req, res) => {
         if (userIdFromToken !== userId) {
             return res.status(403).json({
                 message:
-                    'Access Denied: You can only create cabins for yourself',
+                    "Access Denied: You can only create cabins for yourself",
             });
         }
 
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({
-                message: 'Invalid user ID',
+                message: "Invalid user ID",
             });
         }
 
@@ -29,15 +29,15 @@ const createCabin = async (req, res) => {
         });
 
         return res.status(201).json({
-            message: 'Cabin created successfully',
+            message: "Cabin created successfully",
             cabin: savedCabin,
         });
     } catch (error) {
-        console.error('Error creating cabin:', error);
+        console.error("Error creating cabin:", error);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: "Internal server error",
             error:
-                process.env.NODE_ENV === 'development'
+                process.env.NODE_ENV === "development"
                     ? error.message
                     : undefined,
         });
