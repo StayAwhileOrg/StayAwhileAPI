@@ -11,7 +11,7 @@ const CabinSchema = new mongoose.Schema(
         description: {
             type: String,
             trim: true,
-            maxlength: [400, "Description cannot exceed 500 characters"],
+            maxlength: [500, "Description cannot exceed 500 characters"],
         },
         images: {
             type: [
@@ -55,19 +55,50 @@ const CabinSchema = new mongoose.Schema(
             required: [true, "Price per night is required"],
             min: [0, "Price cannot be negative"],
         },
-        capacity: {
-            type: Number,
-            required: [true, "Capacity is required"],
-            min: [1, "Capacity must be at least 1"],
-        },
         owner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: [true, "Owner is required"],
         },
+        facilities: {
+            capacity: {
+                type: Number,
+                required: [true, "Capacity is required"],
+                min: [1, "Capacity must be at least 1"],
+            },
+            petsAllowed: {
+                type: Boolean,
+                default: false,
+            },
+            smokingAllowed: {
+                type: Boolean,
+                default: false,
+            },
+            electricity: {
+                type: Boolean,
+                default: false,
+            },
+            water: {
+                type: Boolean,
+                default: false,
+            },
+            wifi: {
+                type: Boolean,
+                default: false,
+            },
+            jacuzzi: {
+                type: Boolean,
+                default: false,
+            },
+            beds: {
+                type: Number,
+                required: [true, "Number of beds is required"],
+                min: [1, "Must have at least 1"],
+            },
+        },
     },
     { timestamps: true }
 );
 
-const Cabin = mongoose.model("cabin", CabinSchema);
+const Cabin = mongoose.model("Cabin", CabinSchema);
 module.exports = Cabin;
