@@ -11,7 +11,11 @@ const getProfile = async (req, res) => {
             });
         }
 
-        const profile = await User.findOne({ _id: userId });
+        const profile = await User.findOne({ _id: userId })
+            .populate('bookedCabins')
+            .populate('postedBookings')
+            .lean();
+
         if (!profile) {
             return res.status(404).json({
                 message: 'No profile found with matching ID',
