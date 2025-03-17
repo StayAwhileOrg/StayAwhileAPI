@@ -80,6 +80,18 @@ const UserSchema = new mongoose.Schema(
             max: 5,
             default: null,
         },
+        bookedCabins: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Booking',
+            },
+        ],
+        postedBookings: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Booking',
+            },
+        ],
         role: {
             type: String,
             enum: ['user', 'admin'],

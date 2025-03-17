@@ -92,6 +92,7 @@ const CabinSchema = new mongoose.Schema(
             },
             beds: {
                 type: Number,
+                required: [true, 'Number of beds is required'],
                 min: [1, 'Must have at least 1'],
             },
         },
@@ -99,5 +100,5 @@ const CabinSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const Cabin = mongoose.model("cabin", CabinSchema);
+const Cabin = mongoose.model("Cabin", CabinSchema);
 module.exports = Cabin;

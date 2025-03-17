@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middleware.js");
 
-const { createCabin } = require("../controllers/cabin/createCabin.js");
+const createCabin = require('../controllers/cabin/createCabin.js')
 const { getAllCabins } = require("../controllers/cabin/getAllCabins.js");
 const { getCabin } = require("../controllers/cabin/getCabin.js");
 const { updateCabin } = require("../controllers/cabin/updateCabin.js");
