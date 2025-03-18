@@ -7,7 +7,7 @@ const getAllBooking = require("../controllers/booking/getAllBookings.js");
 // const getBooking = require("../controllers/booking/getBooking.js");
 const updateBooking = require("../controllers/booking/updateBooking.js");
 
-router.post("/:userId/:cabinId", verifyToken, createBooking);
+router.post("/:cabinId", verifyToken, createBooking);
 
 router.get("/:userId", verifyToken, getAllBooking);
 
