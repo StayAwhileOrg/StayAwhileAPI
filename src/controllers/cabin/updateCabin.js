@@ -7,7 +7,7 @@ const updateCabin = async (req, res) => {
         const updateData = req.body;
 
         if (!cabinId || !cabinId.match(/^[0-9a-fA-F]{24}$/)) {
-            return res.status(400).json({ message: 'Invalid cabin ID format' });
+            return res.status(400).json({ message: 'Invalid cabin ID format' }); 
         }
 
         const user = await User.findById(req.user);
