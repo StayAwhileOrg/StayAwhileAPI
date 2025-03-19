@@ -117,7 +117,5 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
-// all booking by profile
-
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
