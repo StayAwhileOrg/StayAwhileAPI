@@ -3,7 +3,7 @@ const { generateToken } = require("../../middleware.js");
 const User = require("../../models/user.model.js");
 require("dotenv").config();
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -28,9 +28,24 @@ exports.login = async (req, res) => {
 
         const token = generateToken(user._id);
 
+        const safeUser = {
+            _id: user._id,
+            name: {
+                firstName: user.name.firstName,
+                lastName: user.name.lastName,
+            },
+            email: user.email,
+            images: {
+                imgUrl: user.images.imgUrl,
+                imgAlt: user.images.imgAlt,
+            },
+            bio: user.bio || '',
+            averageRating: user.averageRating,
+        };
+
         res.status(200).json({
             message: "Login successful",
-            user,
+            user: safeUser,
             token,
             userId: user._id.toString(),
         });
@@ -42,3 +57,5 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: "An unexpected error occurred" });
     }
 };
+
+module.exports = login;
