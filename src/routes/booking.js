@@ -4,14 +4,14 @@ const { verifyToken } = require("../middleware.js");
 
 const createBooking = require("../controllers/booking/createBooking.js");
 const getAllBooking = require("../controllers/booking/getAllBookings.js");
-// const getBooking = require("../controllers/booking/getBooking.js");
+const getBooking = require("../controllers/booking/getBooking.js");
 const updateBooking = require("../controllers/booking/updateBooking.js");
 
 router.post("/:cabinId", verifyToken, createBooking);
 
-router.get("/:userId", verifyToken, getAllBooking);
+router.get("/allBookings/:userId", verifyToken, getAllBooking);
 
-// router.get("/:bookingId", verifyToken, getBooking);
+router.get("/:bookingId", verifyToken, getBooking);
 
 router.put("/:bookingId", verifyToken, updateBooking);
 
