@@ -12,7 +12,7 @@ const updateProfile = async (req, res) => {
             });
         }
 
-        const allowedFields = ['images.imgUrl', 'images.imgAlt', 'bio'];
+        const allowedFields = ['image.imgUrl', 'image.imgAlt', 'bio'];
 
         const filteredData = {};
         for (const key in updateData) {

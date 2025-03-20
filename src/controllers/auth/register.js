@@ -5,8 +5,8 @@ require("dotenv").config();
 
 const register = async (req, res) => {
     try {
-        const { name, email, password, images, bio } = req.body;
-        if (!name?.firstName || !name?.lastName || !email || !password) {
+        const { name, email, password, image = null, bio, phone } = req.body;
+        if (!name?.firstName || !name?.lastName || !phone || !email || !password) {
             return res.status(400).json({
                 message: "Missing required userInfo fields.",
             });
@@ -29,24 +29,26 @@ const register = async (req, res) => {
             },
             email,
             password: hashedPassword,
-            images,
+            phone,
+            image,
             bio,
         });
 
         const token = generateToken(user._id);
 
         const safeUser = {
-            _id: user._id,
+            _id: user._id.toString(),
             name: {
                 firstName: user.name.firstName,
                 lastName: user.name.lastName,
             },
             email: user.email,
-            images: {
-                imgUrl: user.images.imgUrl,
-                imgAlt: user.images.imgAlt,
+            phone: user.phone,
+            image: {
+                imgUrl: user.image.imgUrl,
+                imgAlt: user.image.imgAlt,
             },
-            bio: user.bio,
+            bio: user.bio || '',
             averageRating: user.averageRating,
         };
 
@@ -54,7 +56,6 @@ const register = async (req, res) => {
             message: "User registered and logged in successfully",
             user: safeUser,
             token,
-            userId: user._id.toString(),
         });
     } catch (error) {
         if (error.name === "ValidationError") {
