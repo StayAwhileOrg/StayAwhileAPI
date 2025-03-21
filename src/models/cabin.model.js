@@ -10,6 +10,7 @@ const CabinSchema = new mongoose.Schema(
         },
         description: {
             type: String,
+            required: [true, "a description is required"],
             trim: true,
             maxlength: [500, "Description cannot exceed 500 characters"],
         },
