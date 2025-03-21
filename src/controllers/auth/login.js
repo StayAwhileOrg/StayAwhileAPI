@@ -29,15 +29,15 @@ const login = async (req, res) => {
         const token = generateToken(user._id);
 
         const safeUser = {
-            _id: user._id,
+            _id: user._id.toString(),
             name: {
                 firstName: user.name.firstName,
                 lastName: user.name.lastName,
             },
             email: user.email,
-            images: {
-                imgUrl: user.images.imgUrl,
-                imgAlt: user.images.imgAlt,
+            image: {
+                imgUrl: user.image.imgUrl,
+                imgAlt: user.image.imgAlt,
             },
             bio: user.bio || '',
             averageRating: user.averageRating,
@@ -47,13 +47,8 @@ const login = async (req, res) => {
             message: "Login successful",
             user: safeUser,
             token,
-            userId: user._id.toString(),
         });
     } catch (error) {
-        console.error("Login error:", {
-            message: error.message,
-            stack: error.stack,
-        });
         res.status(500).json({ message: "An unexpected error occurred" });
     }
 };

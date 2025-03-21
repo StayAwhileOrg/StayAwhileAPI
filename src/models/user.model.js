@@ -37,11 +37,12 @@ const UserSchema = new mongoose.Schema(
             trim: true,
             maxlength: 8,
             minlength: 8,
+            required: true,
         },
-        images: {
+        image: {
             imgUrl: {
-                type: String,
-                required: [true, 'Profile image URL is required'],
+                type: String || null,
+                required: [false, 'Profile image URL is required'],
                 trim: true,
             },
             imgAlt: {
@@ -54,6 +55,7 @@ const UserSchema = new mongoose.Schema(
             type: String,
             trim: true,
             maxlength: 400,
+            default: '',
         },
         ratings: [
             {
