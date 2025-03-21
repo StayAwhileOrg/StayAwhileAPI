@@ -35,6 +35,7 @@ const login = async (req, res) => {
                 lastName: user.name.lastName,
             },
             email: user.email,
+            phone: user.phone,
             image: {
                 imgUrl: user.image.imgUrl,
                 imgAlt: user.image.imgAlt,
