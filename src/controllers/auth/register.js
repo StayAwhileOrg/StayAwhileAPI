@@ -12,10 +12,14 @@ const register = async (req, res) => {
             });
         }
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({
+            $or: [{ email }, { phone }],
+        });
         if (existingUser) {
+            let conflictField =
+                existingUser.email === email ? 'Email' : 'Phone number';
             return res.status(400).json({
-                message: "Email already exists.",
+                message: `${conflictField} already exists.`,
             });
         }
 
@@ -64,7 +68,6 @@ const register = async (req, res) => {
         if (error.code === 11000) {
             return res.status(400).json({ message: "Email already exists" });
         }
-        console.error("Registration error:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
