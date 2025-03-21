@@ -10,6 +10,7 @@ const CabinSchema = new mongoose.Schema(
         },
         description: {
             type: String,
+            required: [true, "a description is required"],
             trim: true,
             maxlength: [500, "Description cannot exceed 500 characters"],
         },
@@ -44,7 +45,7 @@ const CabinSchema = new mongoose.Schema(
                 required: [true, "Postal code is required"],
                 trim: true,
             },
-            country: {
+            country: {W
                 type: String,
                 required: [true, "Country is required"],
                 trim: true,
