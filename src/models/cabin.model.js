@@ -45,7 +45,7 @@ const CabinSchema = new mongoose.Schema(
                 required: [true, "Postal code is required"],
                 trim: true,
             },
-            country: {W
+            country: {
                 type: String,
                 required: [true, "Country is required"],
                 trim: true,
