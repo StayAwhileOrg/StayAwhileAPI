@@ -1,9 +1,9 @@
-const Cabin = require('../../models/cabin.model');
+const Cabin = require("../../models/cabin.model");
 
 const getAllCabins = async (req, res) => {
     try {
         const {
-            title,
+            search,
             city,
             country,
             sortOrder,
@@ -21,16 +21,20 @@ const getAllCabins = async (req, res) => {
 
         const query = {};
 
-        if (title) {
-            query.title = { $regex: title.trim(), $options: 'i' };
+        if (search) {
+            query.$or = [
+                { title: { $regex: search.trim(), $options: "i" } },
+                { description: { $regex: search.trim(), $options: "i" } },
+            ];
         }
+
         if (city) {
-            query['location.city'] = { $regex: city.trim(), $options: 'i' };
+            query["location.city"] = { $regex: city.trim(), $options: "i" };
         }
         if (country) {
-            query['location.country'] = {
+            query["location.country"] = {
                 $regex: country.trim(),
-                $options: 'i',
+                $options: "i",
             };
         }
 
@@ -39,18 +43,18 @@ const getAllCabins = async (req, res) => {
             if (isNaN(numCapacity) || numCapacity < 1) {
                 return res
                     .status(400)
-                    .json({ message: 'Capacity must be a positive number' });
+                    .json({ message: "Capacity must be a positive number" });
             }
-            query['facilities.capacity'] = numCapacity;
+            query["facilities.capacity"] = numCapacity;
         }
         if (beds) {
             const numBeds = Number(beds);
             if (isNaN(numBeds) || numBeds < 1) {
                 return res
                     .status(400)
-                    .json({ message: 'Beds must be a positive number' });
+                    .json({ message: "Beds must be a positive number" });
             }
-            query['facilities.beds'] = numBeds;
+            query["facilities.beds"] = numBeds;
         }
 
         const booleanFields = {
@@ -63,15 +67,15 @@ const getAllCabins = async (req, res) => {
         };
         Object.entries(booleanFields).forEach(([field, value]) => {
             if (value !== undefined) {
-                const boolValue = value.toLowerCase() === 'true';
+                const boolValue = value.toLowerCase() === "true";
                 query[`facilities.${field}`] = boolValue;
             }
         });
 
         const sortOption = {};
-        if (sortOrder && ['asc', 'desc'].includes(sortOrder.toLowerCase())) {
+        if (sortOrder && ["asc", "desc"].includes(sortOrder.toLowerCase())) {
             sortOption.pricePerNight =
-                sortOrder.toLowerCase() === 'asc' ? 1 : -1;
+                sortOrder.toLowerCase() === "asc" ? 1 : -1;
         } else {
             sortOption.createdAt = -1;
         }
@@ -83,8 +87,8 @@ const getAllCabins = async (req, res) => {
         const [cabins, total] = await Promise.all([
             Cabin.find(query)
                 .populate({
-                    path: 'owner',
-                    select: 'email name.firstName name.lastName phone',
+                    path: "owner",
+                    select: "email name.firstName name.lastName phone",
                 })
                 .sort(sortOption)
                 .skip(skip)
@@ -103,20 +107,14 @@ const getAllCabins = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error('Get all cabins error:', {
-            message: error.message,
-            stack: error.stack,
-            query: req.query,
-        });
-
-        if (error.name === 'CastError') {
+        if (error.name === "CastError") {
             return res
                 .status(400)
-                .json({ message: 'Invalid query parameter format' });
+                .json({ message: "Invalid query parameter format" });
         }
 
         res.status(500).json({
-            message: 'Internal server error',
+            message: "Internal server error",
             error: error.message,
         });
     }
