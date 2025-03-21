@@ -16,12 +16,12 @@ const getBooking = async (req, res) => {
             .populate("cabin")
             .populate("owner", "name email");
 
-        const isUser = booking.user._id.toString() === req.user.toString();
+        const isGuest = booking.guest._id.toString() === req.user.toString();
         const isOwner = booking.owner._id.toString() === req.user.toString();
-        if (!isUser && !isOwner) {
+        if (!isGuest && !isOwner) {
             return res.status(403).json({
                 message:
-                    "You can only view your own bookings or bookings for cabins you own",
+                    'You can only view your own bookings or bookings for cabins you own',
             });
         }
 
