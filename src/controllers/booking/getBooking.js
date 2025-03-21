@@ -1,15 +1,20 @@
 const Booking = require('../../models/booking.model.js');
+const mongoose = require('mongoose');
 
 const getBooking = async (req, res) => {
     try {
         const { bookingId } = req.params;
 
-        if (!bookingId) {
-            return res.status(400).json({ message: 'Booking ID is required' });
+        if (!bookingId || !mongoose.isValidObjectId(bookingId)) {
+            return res
+                .status(400)
+                .json({ message: 'Valid Booking ID is required' });
         }
 
-        if (!req.user) {
-            return res.status(401).json({ message: 'Not authorized' });
+        if (!req.user || !mongoose.isValidObjectId(req.user)) {
+            return res
+                .status(401)
+                .json({ message: 'Not authorized - invalid user' });
         }
 
         const booking = await Booking.findOne({

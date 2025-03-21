@@ -9,7 +9,7 @@ const updateBooking = require("../controllers/booking/updateBooking.js");
 
 router.post("/:cabinId", verifyToken, createBooking);
 
-router.get("/:userId", verifyToken, getAllBooking);
+router.get("/all/:userId", verifyToken, getAllBooking);
 
 router.get("/:bookingId", verifyToken, getBooking);
 
