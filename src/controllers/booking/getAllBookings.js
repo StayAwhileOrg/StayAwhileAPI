@@ -12,7 +12,7 @@ const getAllBookings = async (req, res) => {
             });
         }
 
-        const bookings = await Booking.find({ user: userId })
+        const bookings = await Booking.find({ guest: userId })
             .populate("cabin")
             .populate("owner", "name email")
             .sort({ startDate: 1 });
