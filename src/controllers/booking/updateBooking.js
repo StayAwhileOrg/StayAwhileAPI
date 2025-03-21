@@ -1,6 +1,5 @@
 const Booking = require("../../models/booking.model");
 
-// for owner to confirm
 const updateBooking = async (req, res) => {
     try {
         const { bookingId } = req.params;

@@ -1,6 +1,6 @@
-const Booking = require("../../models/booking.model");
-const User = require("../../models/user.model");
-const Cabin = require("../../models/cabin.model");
+const Booking = require('../../models/booking.model');
+const User = require('../../models/user.model');
+const Cabin = require('../../models/cabin.model');
 
 const createBooking = async (req, res) => {
     try {
@@ -10,15 +10,21 @@ const createBooking = async (req, res) => {
         if (!cabinId || !startDate || !endDate || totalPrice === undefined) {
             return res.status(400).json({
                 message:
-                    "cabinId, startDate, endDate, and totalPrice are required",
+                    'cabinId, startDate, endDate, and totalPrice are required',
             });
         }
 
         const cabin = await Cabin.findById(cabinId);
         if (!cabin) {
             return res.status(404).json({
-                message: "Cabin not found",
+                message: 'Cabin not found',
             });
+        }
+
+        if (cabin.owner.toString() === userId.toString()) {
+            return res
+                .status(400)
+                .json({ message: 'You cannot book your own cabin' });
         }
 
         const start = new Date(startDate);
@@ -31,14 +37,41 @@ const createBooking = async (req, res) => {
             });
         }
 
+        if (start >= end) {
+            return res.status(400).json({
+                message: 'End date must be after start date',
+            });
+        }
+
+        const conflictingBooking = await Booking.findOne({
+            cabin: cabinId,
+            status: 'confirmed',
+            $or: [
+                {
+                    startDate: { $lte: end },
+                    endDate: { $gte: start },
+                },
+            ],
+        });
+
+        if (conflictingBooking) {
+            return res.status(400).json({
+                message: 'Cabin is already booked for the selected dates',
+                conflictingDates: {
+                    start: conflictingBooking.startDate,
+                    end: conflictingBooking.endDate,
+                },
+            });
+        }
+
         const booking = new Booking({
-            user: userId,
+            guest: userId,
             cabin: cabinId,
             owner: cabin.owner,
             startDate: start,
             endDate: end,
             totalPrice,
-            status: "pending",
+            status: 'pending',
         });
 
         await booking.save();
@@ -53,25 +86,25 @@ const createBooking = async (req, res) => {
 
         const populatedBooking = await Booking.findById(booking._id)
             .populate({
-                path: "user",
-                select: "name.firstName name.lastName email phone",
+                path: 'guest',
+                select: 'name.firstName name.lastName email phone',
             })
             .populate({
-                path: "owner",
-                select: "name.firstName name.lastName email phone",
+                path: 'owner',
+                select: 'name.firstName name.lastName email phone',
             })
             .lean();
 
         return res.status(201).json({
-            message: "Booking created successfully",
+            message: 'Booking created successfully',
             booking: populatedBooking,
         });
     } catch (error) {
-        console.error("Error creating booking:", error);
+        console.error('Error creating booking:', error);
         return res.status(500).json({
-            message: "Internal server error",
+            message: 'Internal server error',
             error:
-                process.env.NODE_ENV === "development"
+                process.env.NODE_ENV === 'development'
                     ? error.message
                     : undefined,
         });
