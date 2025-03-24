@@ -6,9 +6,26 @@ require("dotenv").config();
 const register = async (req, res) => {
     try {
         const { name, email, password, image = null, bio, phone } = req.body;
-        if (!name?.firstName || !name?.lastName || !phone || !email || !password) {
+        if (
+            !name?.firstName ||
+            !name?.lastName ||
+            !phone ||
+            !email ||
+            !password
+        ) {
             return res.status(400).json({
                 message: "Missing required userInfo fields.",
+            });
+        }
+        if (password.length < 8) {
+            return res.status(400).json({
+                message: "Password must be at least 8 characters long.",
+            });
+        }
+
+        if (!/^[0-9]{8}$/.test(phone)) {
+            return res.status(400).json({
+                message: "Phone number must be exactly 8 digits long.",
             });
         }
 
@@ -17,7 +34,7 @@ const register = async (req, res) => {
         });
         if (existingUser) {
             let conflictField =
-                existingUser.email === email ? 'Email' : 'Phone number';
+                existingUser.email === email ? "Email" : "Phone number";
             return res.status(400).json({
                 message: `${conflictField} already exists.`,
             });
@@ -52,7 +69,7 @@ const register = async (req, res) => {
                 imgUrl: user.image.imgUrl,
                 imgAlt: user.image.imgAlt,
             },
-            bio: user.bio || '',
+            bio: user.bio || "",
             averageRating: user.averageRating,
         };
 
