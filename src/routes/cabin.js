@@ -7,8 +7,10 @@ const getAllCabins = require("../controllers/cabin/getAllCabins.js");
 const getCabin = require("../controllers/cabin/getCabin.js");
 const updateCabin = require("../controllers/cabin/updateCabin.js");
 const deleteCabin = require("../controllers/cabin/deleteCabin.js");
+const rateCabin = require("../controllers/cabin/rateCabin.js");
 
 router.post("/:userId", verifyToken, createCabin);
+router.post("/rate/:cabinId", verifyToken, rateCabin);
 router.get("/", getAllCabins);
 router.get("/:cabinId", getCabin);
 router.put("/:cabinId", verifyToken, updateCabin);
