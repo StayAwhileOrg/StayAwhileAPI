@@ -119,5 +119,10 @@ UserSchema.pre("save", function (next) {
     next();
 });
 
+UserSchema.pre(/^find/, function (next) {
+    this.populate("bookedCabins").populate("postedBookings");
+    next();
+});
+
 const User = mongoose.model("User", UserSchema);
 module.exports = User;
