@@ -1,16 +1,16 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const generateToken = (userId) => {
-    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "2h" });
 };
 
 const verifyToken = (req, res, next) => {
-    const token = req.header('Authorization')?.split(' ')[1];
+    const token = req.header("Authorization")?.split(" ")[1];
     if (!token) {
         return res
             .status(401)
-            .json({ message: 'Access Denied: No token provided' });
+            .json({ message: "Access Denied: No token provided" });
     }
 
     try {
@@ -18,7 +18,7 @@ const verifyToken = (req, res, next) => {
         req.user = decoded.userId;
         next();
     } catch (error) {
-        return res.status(403).json({ message: 'Invalid or expired token' });
+        return res.status(403).json({ message: "Invalid or expired token" });
     }
 };
 
