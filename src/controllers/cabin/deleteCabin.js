@@ -1,5 +1,6 @@
 const Cabin = require('../../models/cabin.model');
 const User = require('../../models/user.model.js');
+const Booking = require('../../models/booking.model.js');
 
 const deleteCabin = async (req, res) => {
     try {
@@ -19,11 +20,17 @@ const deleteCabin = async (req, res) => {
             return res.status(401).json({ message: 'User not found' });
         }
 
+        const bookings = await Booking.find({ cabin: cabinId });
+        if (bookings.length > 0) {
+            await Booking.deleteMany({ cabin: cabinId });
+        }
+
         await Cabin.findByIdAndDelete(cabinId);
 
         res.status(200).json({
-            message: 'Cabin successfully deleted',
+            message: 'Cabin and associated bookings successfully deleted',
             cabinId: cabinId,
+            deletedBookingsCount: bookings.length,
         });
     } catch (error) {
         console.error('Delete cabin error:', {
